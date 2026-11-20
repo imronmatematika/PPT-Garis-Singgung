@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi PPT: Garis Singgung Lingkaran Kelas XI</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0f172a;
+            --bg-slide: #ffffff;
+            --bg-outer: #1e293b;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --accent: #ef4444;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-outer);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Container Layar Presentasi (Rasio 16:9) */
+        .presentation-wrapper {
+            width: 92vw;
+            max-width: 1120px;
+            aspect-ratio: 16 / 9;
+            max-height: 82vh;
+            background: var(--bg-slide);
+            border-radius: 14px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Slide Individual */
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 2.5rem 3.5rem;
+            flex-direction: column;
+            justify-content: space-between;
+            animation: fadeIn 0.35s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide Judul (Cover) */
+        .slide-cover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-cover .badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+        }
+
+        .slide-cover h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .slide-cover p {
+            font-size: 1.25rem;
+            opacity: 0.85;
+            max-width: 700px;
+        }
+
+        /* Header Tiap Slide */
+        .slide-header {
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .slide-header h2 {
+            color: var(--secondary);
+            font-size: 1.75rem;
+        }
+
+        .slide-header span {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        /* Konten 2 Kolom (Teks & Gambar Canvas) */
+        .slide-body {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2rem;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .slide-body.single-col {
+            grid-template-columns: 1fr;
+        }
+
+        .text-content ul {
+            margin-left: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .text-content li {
+            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .formula-box {
+            background: #eff6ff;
+            border-left: 5px solid var(--primary);
+            padding: 0.9rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 0.8rem 0;
+        }
+
+        .example-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        .visual-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.8rem;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Footer Slide */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 0.6rem;
+        }
+
+        /* Kontrol Navigasi Bawah */
+        .controls {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            color: white;
+        }
+
+        .controls button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.3rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .controls button:hover:not(:disabled) {
+            background: #3b82f6;
+        }
+
+        .controls button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .slide-counter {
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .hint {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 0.4rem;
+        }
+
+        /* Daftar Isi Grid */
+        .toc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .toc-item {
+            background: #f1f5f9;
+            border-left: 5px solid var(--primary);
+            padding: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .toc-item:hover {
+            background: #e0e7ff;
+            transform: translateX(4px);
+        }
+
+        .toc-item h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+            font-size: 1.15rem;
+        }
+
+        .toc-item p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-wrapper">
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide slide-cover active">
+        <div class="badge">Matematika Kelas XI SMA/SMK</div>
+        <h1>Garis Singgung Lingkaran</h1>
+        <p>Panjang Garis Singgung, Layang-Layang Garis Singgung, Segitiga Garis Singgung, dan Segi Empat Garis Singgung</p>
+    </div>
+
+    <!-- SLIDE 2: DAFTAR MATERI -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2>Pokok Bahasan Materi</h2>
+            <span>Klik kotak untuk melompat ke slide</span>
+        </div>
+        <div class="slide-body single-col">
+            <div class="toc-grid">
+                <div class="toc-item" onclick="goToSlide(2)">
+                    <h3>1. Panjang Garis Singgung Lingkaran</h3>
+                    <p>Pengertian titik singgung, sifat tegak lurus jari-jari, dan penerapan Teorema Pythagoras.</p>
+                </div>
+                <div class="toc-item" onclick="goToSlide(3)">
+                    <h3>2. Layang-Layang Garis Singgung</h3>
+                    <p>Dua garis singgung dari satu titik di luar lingkaran, luas layang-layang, dan panjang tali busur.</p>
+                </div>
+                <div class="toc-item" onclick="goToSlide(4)">
+                    <h3>3. Segitiga Garis Singgung</h3>
+                    <p>Lingkaran dalam segitiga, panjang segmen garis singgung sudut, dan jari-jari lingkaran dalam.</p>
+                </div>
+                <div class="toc-item" onclick="goToSlide(5)">
+                    <h3>4. Segi Empat Garis Singgung</h3>
+                    <p>Sifat sisi berhadapan (Teorema Pitot) dan hubungan luas segi empat dengan jari-jari lingkaran.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>Materi Matematika Kelas XI</span>
+            <span>Slide 2 / 7</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: PANJANG GARIS SINGGUNG -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2>1. Panjang Garis Singgung Lingkaran</h2>
+            <span>Sub-bab 1</span>
+        </div>
+        <div class="slide-body">
+            <div class="text-content">
+                <ul>
+                    <li><strong>Garis singgung</strong> memotong lingkaran tepat di satu titik (titik singgung B).</li>
+                    <li>Garis singgung selalu <strong>tegak lurus (90°)</strong> dengan jari-jari OB.</li>
+                    <li>Segitiga OAB siku-siku di B, sehingga berlaku <strong>Teorema Pythagoras</strong>:</li>
+                </ul>
+                <div class="formula-box">
+                    d = √(p² - r²)
+                </div>
+                <div class="example-card">
+                    <strong>Contoh:</strong> Jari-jari r = 7 cm, jarak pusat ke titik luar p = 25 cm.<br>
+                    d = √(25² - 7²) = √(625 - 49) = √576 = <strong>24 cm</strong>.
+                </div>
+            </div>
+            <div class="visual-content">
+                <canvas id="canvas1" width="380" height="240"></canvas>
+                <small style="color:#64748b; margin-top:5px;">Ilustrasi Segitiga Siku-Siku OAB</small>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>d = panjang garis singgung | p = jarak ke pusat | r = jari-jari</span>
+            <span>Slide 3 / 7</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: LAYANG-LAYANG GARIS SINGGUNG -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2>2. Layang-Layang Garis Singgung</h2>
+            <span>Sub-bab 2</span>
+        </div>
+        <div class="slide-body">
+            <div class="text-content">
+                <ul>
+                    <li>Dari titik A di luar lingkaran dapat ditarik 2 garis singgung sama panjang (<strong>AB = AC</strong>).</li>
+                    <li>Bangun <strong>OBAC</strong> membentuk layang-layang dengan diagonal OA dan tali busur BC.</li>
+                </ul>
+                <div class="formula-box">
+                    Luas OBAC = r × d<br>
+                    Panjang Tali Busur BC = (2 × r × d) / p
+                </div>
+                <div class="example-card">
+                    <strong>Contoh:</strong> Jika r = 6 cm dan p = 10 cm, maka d = 8 cm.<br>
+                    • Luas OBAC = 6 × 8 = <strong>48 cm²</strong><br>
+                    • Tali busur BC = (2 × 6 × 8) / 10 = <strong>9,6 cm</strong>
+                </div>
+            </div>
+            <div class="visual-content">
+                <canvas id="canvas2" width="380" height="240"></canvas>
+                <small style="color:#64748b; margin-top:5px;">Layang-Layang Garis Singgung OBAC</small>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>Sudut ∠OBA = ∠OCA = 90°</span>
+            <span>Slide 4 / 7</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: SEGITIGA GARIS SINGGUNG -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2>3. Segitiga Garis Singgung (Lingkaran Dalam)</h2>
+            <span>Sub-bab 3</span>
+        </div>
+        <div class="slide-body">
+            <div class="text-content">
+                <ul>
+                    <li>Ketiga sisi segitiga menyinggung lingkaran di titik D, E, dan F.</li>
+                    <li>Panjang segmen dari tiap sudut sama: <strong>AD = AF</strong>, <strong>BD = BE</strong>, <strong>CE = CF</strong>.</li>
+                </ul>
+                <div class="formula-box">
+                    s = ½(a + b + c)<br>
+                    AD = s - a &nbsp;|&nbsp; BD = s - b &nbsp;|&nbsp; CE = s - c<br>
+                    Jari-jari (r) = Luas Segitiga / s
+                </div>
+                <div class="example-card">
+                    <strong>Contoh:</strong> Segitiga sisi 13, 14, 15 cm &rarr; s = 21 cm.<br>
+                    • AD = 21 - 13 = <strong>8 cm</strong> | BD = 21 - 14 = <strong>7 cm</strong> | CE = 21 - 15 = <strong>6 cm</strong>
+                </div>
+            </div>
+            <div class="visual-content">
+                <canvas id="canvas3" width="380" height="240"></canvas>
+                <small style="color:#64748b; margin-top:5px;">Lingkaran Dalam Segitiga ABC</small>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>a = BC, b = AC, c = AB</span>
+            <span>Slide 5 / 7</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: SEGI EMPAT GARIS SINGGUNG -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2>4. Segi Empat Garis Singgung (Teorema Pitot)</h2>
+            <span>Sub-bab 4</span>
+        </div>
+        <div class="slide-body">
+            <div class="text-content">
+                <ul>
+                    <li>Keempat sisi segi empat ABCD menyinggung lingkaran di dalamnya.</li>
+                    <li><strong>Teorema Pitot:</strong> Jumlah panjang sisi yang berhadapan adalah sama besar.</li>
+                </ul>
+                <div class="formula-box">
+                    AB + CD = BC + AD<br>
+                    Luas Segi Empat = s × r
+                </div>
+                <div class="example-card">
+                    <strong>Contoh:</strong> Diketahui AB = 10 cm, BC = 12 cm, dan CD = 8 cm.<br>
+                    AB + CD = BC + AD &rarr; 10 + 8 = 12 + AD &rarr; <strong>AD = 6 cm</strong>.
+                </div>
+            </div>
+            <div class="visual-content">
+                <canvas id="canvas4" width="380" height="240"></canvas>
+                <small style="color:#64748b; margin-top:5px;">Segi Empat Garis Singgung ABCD</small>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>s = setengah keliling segi empat</span>
+            <span>Slide 6 / 7</span>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: RANGKUMAN & PENUTUP -->
+    <div class="slide">
+        <div class="slide-header">
+            <h2>Rangkuman Rumus Utama</h2>
+            <span>Penutup</span>
+        </div>
+        <div class="slide-body single-col">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="formula-box" style="margin:0;">
+                    1. Panjang Garis Singgung<br>
+                    <span style="font-weight:normal; font-size:1rem;">d = √(p² - r²)</span>
+                </div>
+                <div class="formula-box" style="margin:0;">
+                    2. Layang-Layang Garis Singgung<br>
+                    <span style="font-weight:normal; font-size:1rem;">Luas = r × d &nbsp;|&nbsp; Tali Busur = (2·r·d) / p</span>
+                </div>
+                <div class="formula-box" style="margin:0;">
+                    3. Segitiga Garis Singgung<br>
+                    <span style="font-weight:normal; font-size:1rem;">Segmen = s - sisi depan &nbsp;|&nbsp; r = Luas / s</span>
+                </div>
+                <div class="formula-box" style="margin:0;">
+                    4. Segi Empat Garis Singgung<br>
+                    <span style="font-weight:normal; font-size:1rem;">AB + CD = BC + AD &nbsp;|&nbsp; Luas = s × r</span>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:1.5rem; color: var(--secondary);">
+                <h3>Terima Kasih!</h3>
+                <p style="color: var(--text-muted);">Silakan gunakan tombol navigasi atau papan ketik untuk mengulang materi.</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span>Matematika Kelas XI — Garis Singgung Lingkaran</span>
+            <span>Slide 7 / 7</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- KONTROL PRESENTASI -->
+<div class="controls">
+    <button id="btnPrev" onclick="changeSlide(-1)">&#8592; Sebelumnya</button>
+    <span class="slide-counter" id="slideCounter">1 / 7</span>
+    <button id="btnNext" onclick="changeSlide(1)">Berikutnya &#8594;</button>
+</div>
+<div class="hint">Tips: Gunakan tombol panah kiri/kanan pada keyboard, atau tekan F11 untuk layar penuh.</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const slideCounter = document.getElementById('slideCounter');
+
+    function updateSlideDisplay() {
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === currentSlide);
+        });
+        slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+        btnPrev.disabled = currentSlide === 0;
+        btnNext.disabled = currentSlide === slides.length - 1;
+    }
+
+    function changeSlide(direction) {
+        const next = currentSlide + direction;
+        if (next >= 0 && next < slides.length) {
+            currentSlide = next;
+            updateSlideDisplay();
+        }
+    }
+
+    function goToSlide(index) {
+        if (index >= 0 && index < slides.length) {
+            currentSlide = index;
+            updateSlideDisplay();
+        }
+    }
+
+    // Navigasi Keyboard
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            changeSlide(1);
+        } else if (e.key === 'ArrowLeft') {
+            changeSlide(-1);
+        }
+    });
+
+    // --- MENGGAMBAR ILUSTRASI CANVAS ---
+    window.onload = function() {
+        updateSlideDisplay();
+        drawCanvas1();
+        drawCanvas2();
+        drawCanvas3();
+        drawCanvas4();
+    };
+
+    function drawDot(ctx, x, y, color = '#0f172a') {
+        ctx.beginPath(); ctx.arc(x, y, 4, 0, 2 * Math.PI);
+        ctx.fillStyle = color; ctx.fill();
+    }
+
+    function drawCanvas1() {
+        const ctx = document.getElementById('canvas1').getContext('2d');
+        const cx = 100, cy = 140, r = 60;
+        const bx = cx, by = cy - r;
+        const ax = 320, ay = by;
+
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(bx, by);
+        ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(bx - 20, by); ctx.lineTo(ax, ay);
+        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ax, ay);
+        ctx.setLineDash([5, 5]); ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.strokeRect(bx, by, 10, 10);
+        drawDot(ctx, cx, cy); drawDot(ctx, bx, by); drawDot(ctx, ax, ay);
+
+        ctx.font = 'bold 13px Segoe UI'; ctx.fillStyle = '#0f172a';
+        ctx.fillText('O', cx - 16, cy + 5);
+        ctx.fillText('B', bx - 4, by - 10);
+        ctx.fillText('A', ax + 8, ay + 5);
+        ctx.fillStyle = '#16a34a'; ctx.fillText('r', cx - 14, cy - 28);
+        ctx.fillStyle = '#ef4444'; ctx.fillText('d', 200, by - 8);
+        ctx.fillStyle = '#0f172a'; ctx.fillText('p', 210, cy - 12);
+    }
+
+    function drawCanvas2() {
+        const ctx = document.getElementById('canvas2').getContext('2d');
+        const cx = 100, cy = 120, r = 60;
+        const ax = 320, ay = 120;
+        const p = ax - cx;
+        const alpha = Math.acos(r / p);
+        const bx = cx + r * Math.cos(alpha), by = cy - r * Math.sin(alpha);
+        const c_x = cx + r * Math.cos(alpha), c_y = cy + r * Math.sin(alpha);
+
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(bx, by);
+        ctx.moveTo(cx, cy); ctx.lineTo(c_x, c_y);
+        ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay);
+        ctx.moveTo(c_x, c_y); ctx.lineTo(ax, ay);
+        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ax, ay);
+        ctx.moveTo(bx, by); ctx.lineTo(c_x, c_y);
+        ctx.setLineDash([4, 4]); ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.setLineDash([]);
+
+        drawDot(ctx, cx, cy); drawDot(ctx, bx, by); drawDot(ctx, c_x, c_y); drawDot(ctx, ax, ay);
+        ctx.font = 'bold 13px Segoe UI'; ctx.fillStyle = '#0f172a';
+        ctx.fillText('O', cx - 16, cy + 5);
+        ctx.fillText('B', bx - 4, by - 10);
+        ctx.fillText('C', c_x - 4, c_y + 18);
+        ctx.fillText('A', ax + 8, ay + 5);
+    }
+
+    function drawCanvas3() {
+        const ctx = document.getElementById('canvas3').getContext('2d');
+        const A = {x: 190, y: 22}, B = {x: 75, y: 205}, C = {x: 315, y: 205};
+        const a = Math.hypot(B.x - C.x, B.y - C.y);
+        const b = Math.hypot(A.x - C.x, A.y - C.y);
+        const c = Math.hypot(A.x - B.x, A.y - B.y);
+        const perim = a + b + c;
+        const ix = (a * A.x + b * B.x + c * C.x) / perim;
+        const iy = (a * A.y + b * B.y + c * C.y) / perim;
+        const s = perim / 2;
+        const r = Math.sqrt(s * (s - a) * (s - b) * (s - c)) / s;
+
+        ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.lineTo(C.x, C.y); ctx.closePath();
+        ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.beginPath(); ctx.arc(ix, iy, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        const proj = (P, Q, I) => {
+            const dx = Q.x - P.x, dy = Q.y - P.y;
+            const t = ((I.x - P.x) * dx + (I.y - P.y) * dy) / (dx * dx + dy * dy);
+            return {x: P.x + t * dx, y: P.y + t * dy};
+        };
+        const D = proj(A, B, {x: ix, y: iy});
+        const E = {x: ix, y: B.y};
+        const F = proj(A, C, {x: ix, y: iy});
+
+        [A, B, C].forEach(pt => drawDot(ctx, pt.x, pt.y));
+        [D, E, F].forEach(pt => drawDot(ctx, pt.x, pt.y, '#ef4444'));
+
+        ctx.font = 'bold 13px Segoe UI'; ctx.fillStyle = '#0f172a';
+        ctx.fillText('A', A.x - 4, A.y - 6);
+        ctx.fillText('B', B.x - 16, B.y + 5);
+        ctx.fillText('C', C.x + 8, C.y + 5);
+        ctx.fillStyle = '#ef4444';
+        ctx.fillText('D', D.x - 16, D.y);
+        ctx.fillText('E', E.x - 4, E.y + 15);
+        ctx.fillText('F', F.x + 8, F.y);
+    }
+
+    function drawCanvas4() {
+        const ctx = document.getElementById('canvas4').getContext('2d');
+        const cx = 190, cy = 120, r = 60;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        const angles = [-Math.PI/2, 0.15, Math.PI/2, Math.PI - 0.25];
+        const tangents = angles.map(ang => ({
+            x: cx + r * Math.cos(ang), y: cy + r * Math.sin(ang),
+            nx: Math.cos(ang), ny: Math.sin(ang)
+        }));
+
+        const intersect = (t1, t2) => {
+            const c1 = t1.nx * t1.x + t1.ny * t1.y;
+            const c2 = t2.nx * t2.x + t2.ny * t2.y;
+            const det = t1.nx * t2.ny - t2.nx * t1.ny;
+            return { x: (c1 * t2.ny - c2 * t1.ny) / det, y: (t1.nx * c2 - t2.nx * c1) / det };
+        };
+
+        const B = intersect(tangents[0], tangents[1]);
+        const C = intersect(tangents[1], tangents[2]);
+        const D = intersect(tangents[2], tangents[3]);
+        const A = intersect(tangents[3], tangents[0]);
+
+        ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.lineTo(C.x, C.y); ctx.lineTo(D.x, D.y); ctx.closePath();
+        ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        [A, B, C, D].forEach(pt => drawDot(ctx, pt.x, pt.y));
+        tangents.forEach(pt => drawDot(ctx, pt.x, pt.y, '#ef4444'));
+
+        ctx.font = 'bold 13px Segoe UI'; ctx.fillStyle = '#0f172a';
+        ctx.fillText('A', A.x - 16, A.y - 4);
+        ctx.fillText('B', B.x + 8, B.y - 4);
+        ctx.fillText('C', C.x + 8, C.y + 12);
+        ctx.fillText('D', D.x - 16, D.y + 12);
+    }
+</script>
+
+</body>
+</html>
